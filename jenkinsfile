@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "sairammandapaka/comcast"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/sairam-swamy/comcast'
+            }
+        }
+
+        stage('Build DockerImage') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                sh """
+                docker login -u sairammandapaka -p Ramaswamy@1
+                """
+            }
+        }
+
+        stage('Push to Dockerhub') {
+            steps {
+                    sh """
+                    docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+                    """
+                }
+            }
+
+  
+        }
+    }
