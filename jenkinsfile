@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "sairammandapaka/comcast"
+        IMAGE_NAME = "sreecom916/comcast" // Updated to match your DockerHub repo
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/sairam-swamy/comcast'
+                git branch: 'main', url: 'https://github.com/sreejithrkonny/comcast'
             }
         }
 
@@ -20,20 +20,16 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                sh """
-                docker login -u sairammandapaka -p Ramaswamy@1
-                """
+                sh '''
+                docker login -u sreecom916 -p <<pass>>
+                '''
             }
         }
 
         stage('Push to Dockerhub') {
             steps {
-                    sh """
-                    docker push ${IMAGE_NAME}:${BUILD_NUMBER}
-                    """
-                }
+                sh 'docker push ${IMAGE_NAME}:${BUILD_NUMBER}'
             }
-
-  
         }
     }
+}
